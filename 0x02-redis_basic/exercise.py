@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ Define a class 'cache' """
 import redis
-from typing import Union, Callable
+from typing import Unioin, Callable
 import uuid
 
 
@@ -11,6 +11,18 @@ class Cache:
         """ initialize the cache instace """
         self._redis = redis.Redis()
         self._redis.flushdb(True)
+
+    def count_calls(method: Callable) -> Callable:
+    """Tracks the number of calls made to a method in a Cache class.
+    """
+    @wraps(method)
+    def invoker(self, *args, **kwargs) -> Any:
+        """Invokes the given method after incrementing its call counter.
+        """
+        if isinstance(self._redis, redis.Redis):
+            self._redis.incr(method.__qualname__)
+        return method(self, *args, **kwargs)
+    return invoker
 
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """ A menthod that generate a random key using uuid
