@@ -13,9 +13,8 @@ class Cache:
         self._redis.flushdb(True)
 
     def store(self, data: Union[str, bytes, int, float]) -> str:
-        """ A menthod that generate a random key using uuid
-            stores the input data in redis
-            using a random key and returns the key
+        """ A menthod that generate a random key stores the input
+            data in redisusing a random key and returns the key
         """
         random_key = str(uuid.uuid4())
         self._redis.set(random_key, data)
