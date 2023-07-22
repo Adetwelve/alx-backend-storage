@@ -17,5 +17,5 @@ class Cache:
             data in redisusing a random key and returns the key
         """
         random_key = str(uuid.uuid4())
-        self._redis.set(random_key, data)
+        self._redis[random_key] = data
         return random_key
